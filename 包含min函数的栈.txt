@@ -1,0 +1,80 @@
+包含min函数的栈
+首先会想到在栈里添加一个成员变量记录最小值，但是会出现如果将栈中最小的值pop之后找不到次小的值
+使用一个辅助栈，专门存储每次push进数据之后的最小值
+#include<stack>
+class Solution {
+public:
+	stack<int> data;//存数据的栈
+	stack<int> min_data;//存最小值的栈
+public:
+	void push(int value) 
+	{
+		data.push(value);
+		//如果辅助栈为空直接将value push，如果不为空的时候就将value和辅助栈的栈顶元素进行比较
+		if (min_data.empty())
+		{
+			min_data.push(value);
+		}
+		else
+		{
+			if (value < min_data.top())
+			{
+				min_data.push(value);
+			}
+			else
+			{
+				min_data.push(min_data.top());
+			}
+		}
+	}
+
+	//给数据栈push进一个数时，辅助栈也相应会push进一个两者之间的较小值
+	void pop() 
+	{
+		if (!data.empty())
+		{
+			data.pop();
+			min_data.pop();
+		}
+		return;
+	}
+
+	//当数据栈不为空的时候直接将数据栈的栈顶元素返回
+	int top() 
+	{
+		if (!data.empty())
+		{
+			return data.top();
+		}
+		return 0;
+	}
+
+	//当辅助栈不为空的时候直接将辅助栈的栈顶元素返回
+	int min() 
+	{
+		if (!min_data.empty())
+		{
+			return min_data.top();
+		}
+		return 0;
+	}
+};
+int main()
+{
+	Solution s;
+	s.push(5);
+	s.push(7);
+	s.push(4);
+	s.push(2);
+	s.push(1);
+	s.push(9);
+
+	cout << s.top() << endl;
+	cout << s.min() << endl;
+
+	s.pop();
+	return 0;
+
+}
+
+
